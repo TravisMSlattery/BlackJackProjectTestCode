@@ -49,24 +49,20 @@ public class BlackjackGUI {
 	private static JButton continueButton;
 	private static JLabel shuffleInfo = null;
 
-	public static boolean validAmount(String s) { // This is to assure that the values entered for the initial balance and the player's bet are natural numbers.
+	private static boolean validAmount(String s) { // This is to assure that the values entered for the initial balance and the player's bet are natural numbers.
 		try {
-			if (Integer.parseInt(s) > 0) // Ensure amount entered is > 0
-				return true;
-			else
-				return false;
+			// Ensure amount entered is > 0
+			return Integer.parseInt(s) > 0;
 		} catch (NumberFormatException e) { // If not valid integer
 			return false;
 		}
 	}
 
 	// This function runs when the program starts or when the game ends. It displays the initial GUI objects to enter an initial balance and start/stop a game
-	public static void loadGuiObjects() {
+	private static void loadGuiObjects() {
 		startButton = new JButton("New Game"); // New game button
-		startButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				newGame(); // Start game
-			}
+		startButton.addActionListener(e -> {
+			newGame(); // Start game
 		});
 		startButton.setBounds(20, 610, 99, 50);
 		frame.getContentPane().add(startButton);
@@ -74,12 +70,10 @@ public class BlackjackGUI {
 		endButton = new JButton("End Game"); // End game button, this removes all GUI objects and starts from scratch
 		endButton.setEnabled(false);
 		endButton.setBounds(121, 610, 99, 50);
-		endButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame.getContentPane().removeAll(); // Remove all objects from screen
-				frame.repaint(); // Repaint to show update
-				loadGuiObjects(); // Restart the game logic and display the New Game menu
-			}
+		endButton.addActionListener(e -> {
+			frame.getContentPane().removeAll(); // Remove all objects from screen
+			frame.repaint(); // Repaint to show update
+			loadGuiObjects(); // Restart the game logic and display the New Game menu
 		});
 		frame.getContentPane().add(endButton);
 
@@ -96,7 +90,7 @@ public class BlackjackGUI {
 		frame.getContentPane().add(startBalance);
 	}
 
-	public static void showBetGui() { // This runs when a new game is started. It initializes and displays the current balance label, deal amount and deal button
+	private static void showBetGui() { // This runs when a new game is started. It initializes and displays the current balance label, deal amount and deal button
 
 		endButton.setEnabled(true);
 
@@ -137,10 +131,8 @@ public class BlackjackGUI {
 
 		dealButton = new JButton("Deal"); // Deal button
 		dealButton.setBounds(679, 610, 200, 50);
-		dealButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				deal(); // When clicked, deal
-			}
+		dealButton.addActionListener(e -> {
+			deal(); // When clicked, deal
 		});
 		frame.getContentPane().add(dealButton);
 		dealButton.requestFocus();
@@ -150,7 +142,7 @@ public class BlackjackGUI {
 	}
 
 
-	public static void deal() { // Runs when the Deal button is pressed. Draws two player and dealer cards (only displaying one of the dealer's cards) and asks for an action from the player, or if there's an immediate outcome (eg. blackjack straight away), it takes action
+	private static void deal() { // Runs when the Deal button is pressed. Draws two player and dealer cards (only displaying one of the dealer's cards) and asks for an action from the player, or if there's an immediate outcome (eg. blackjack straight away), it takes action
 
 		if (shuffleInfo != null) // (Every 30 rounds the deck is reshuffled and this label is displayed. Hide it when a new round is started
 			frame.getContentPane().remove(shuffleInfo);
@@ -158,8 +150,9 @@ public class BlackjackGUI {
 		// Initialise dealer/player card arrays
 		dealerCards = new Deck();
 		playerCards = new Deck();
+		splitCards = new Deck();
 
-		if (validAmount(betAmountField.getText()) == true) { // Parse bet amount given
+		if (validAmount(betAmountField.getText())) { // Parse bet amount given
 			betAmount = Integer.parseInt(betAmountField.getText());
 		} else {
 			gameInfo.setText("Error: Bet must be a whole number!"); // Give an error
@@ -195,39 +188,31 @@ public class BlackjackGUI {
 
 		hitButton = new JButton("Hit"); // Hit button
 		hitButton.setBounds(115, 515, 140, 35);
-		hitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				hit(); // When pressed, hit
-			}
+		hitButton.addActionListener(e -> {
+			hit(); // When pressed, hit
 		});
 		frame.getContentPane().add(hitButton);
 		hitButton.requestFocus();
 
 		stayButton = new JButton("Stand"); // Stand button
 		stayButton.setBounds(295, 515, 140, 35);
-		stayButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				stand(); // When pressed, stand
-			}
+		stayButton.addActionListener(e -> {
+			stand(); // When pressed, stand
 		});
 		frame.getContentPane().add(stayButton);
 
 
 		dblButton = new JButton("Double"); // Stand button
 		dblButton.setBounds(475, 515, 140, 35);
-		dblButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dblBet(); // When pressed, stand
-			}
+		dblButton.addActionListener(e -> {
+			dblBet(); // When pressed, stand
 		});
 		frame.getContentPane().add(dblButton);
 
 		splitButton = new JButton("Split"); // Stand button
 		splitButton.setBounds(655, 515, 140, 35);
-		splitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				split(); // When pressed split cards
-			}
+		splitButton.addActionListener(e -> {
+			split(); // When pressed split cards
 		});
 		frame.getContentPane().add(splitButton);
 
@@ -235,10 +220,8 @@ public class BlackjackGUI {
 		continueButton.setEnabled(false);
 		continueButton.setVisible(false);
 		continueButton.setBounds(290, 444, 320, 35);
-		continueButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				continueGame(); // Accept outcome
-			}
+		continueButton.addActionListener(e -> {
+			continueGame(); // Accept outcome
 		});
 		frame.getContentPane().add(continueButton);
 
@@ -273,14 +256,14 @@ public class BlackjackGUI {
 
 	}
 
-	public static void hit() { // Add another card to player cards, show the new card and check for any outcomes
+	private static void hit() { // Add another card to player cards, show the new card and check for any outcomes
 
 		playerCards.myCards.add(deck.takeCard());
 		updateCardPanels();
 		gameOutcomes();
 
 	}
-	public static void dblBet() { // Add another card to player cards, show the new card and check for any outcomes
+	private static void dblBet() { // Add another card to player cards, show the new card and check for any outcomes
 		betAmount = betAmount*2;
 		playerCards.myCards.add(deck.takeCard());
 		updateCardPanels();
@@ -326,7 +309,7 @@ public class BlackjackGUI {
 
 	}
 
-	public static boolean gameOutcomes() { // This runs automatically whenever deal is pressed or the player hits
+	private static boolean gameOutcomes() { // This runs automatically whenever deal is pressed or the player hits
 		boolean gameHasFinished = false;
 		int playerScore = playerCards.getTotalValue(); // Get player score as total of cards he has
 		if (playerScore > 21 && playerCards.getNumAces() > 0) // If player has at least one ace and would otherwise lose (>21), subtract 10
@@ -359,7 +342,7 @@ public class BlackjackGUI {
 
 	}
 
-	public static void stand() { // When stand button is pressed
+	private static void stand() { // When stand button is pressed
 		if (gameOutcomes()) // Check for any normal outcomes. If so, we don't need to do anything here so return.
 			return;
 
@@ -400,12 +383,11 @@ public class BlackjackGUI {
 		gameOver(); // If something's happened, this round is over. Show the results of round and Continue button
 
 	}
-	
-	public static void split() { // Add another card to player cards, show the new card and check for any outcomes
+
+	private static void split() { // Add another card to player cards, show the new card and check for any outcomes
 		splitCardPanel = new CardArray(splitCards, 420 - (splitCards.getCount() * 40), 160, 70, 104, 10);
 		frame.getContentPane().add(splitCardPanel);
 		frame.repaint();
-		splitCards = new Deck();
 		splitCards.myCards.set(0,playerCards.myCards.get(1));
 		playerCards.myCards.remove(1);
 		updateCardPanels();
@@ -459,7 +441,7 @@ public class BlackjackGUI {
 
 	}
 
-	public static void gameOver() { //If something's happened, this round is over. Show the results of round and Continue button
+	private static void gameOver() { //If something's happened, this round is over. Show the results of round and Continue button
 
 		hitButton.setEnabled(false);
 		stayButton.setEnabled(false);
@@ -477,7 +459,7 @@ public class BlackjackGUI {
 
 
 
-	public static void continueGame() { // When outcome is reached
+	private static void continueGame() { // When outcome is reached
 
 		gameInfo.setOpaque(false);
 		gameInfo.setForeground(Color.ORANGE);
@@ -534,9 +516,9 @@ public class BlackjackGUI {
 		}
 	}
 
-	public static void newGame() { // When new game is started
+	private static void newGame() { // When new game is started
 
-		if (validAmount(balanceField.getText()) == true) { // Check that balance is valid
+		if (validAmount(balanceField.getText())) { // Check that balance is valid
 			balance = Integer.parseInt(balanceField.getText());
 		} else {
 			JOptionPane.showMessageDialog(frame, "Invalid balance! Please ensure it is a natural number.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -557,7 +539,7 @@ public class BlackjackGUI {
 
 	}
 
-	public static void updateCardPanels() { // Displays dealer and player cards as images
+	private static void updateCardPanels() { // Displays dealer and player cards as images
 		if (dealerCardPanel != null) { // If they're already added, remove them
 			frame.getContentPane().remove(dealerCardPanel);
 			frame.getContentPane().remove(playerCardPanel);
@@ -571,7 +553,7 @@ public class BlackjackGUI {
 
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+	public static void main(String[] args) {
 
 		// Start of program
 		
