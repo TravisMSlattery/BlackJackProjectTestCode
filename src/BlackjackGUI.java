@@ -20,9 +20,9 @@ public class BlackjackGUI {
 
 	private static JFrame frame = new GameWindow(); // Creating an instance of the MainFrame class.
 
-	private static Deck deck, dealerCards, playerCards, splitCards; //Declaring Variables:
-	private static CardArray dealerCardPanel = null, playerCardPanel = null ,splitCardPanel = null; // The deck of cards, the dealer's cards, the player's cards, the panels for the player's and dealer's cards
-	private static Card dealerHiddenCard; //  and the hidden card of the dealer.
+	public static Deck deck, dealerCards, playerCards, splitCards; //Declaring Variables:
+	public static CardArray dealerCardPanel = null, playerCardPanel = null ,splitCardPanel = null; // The deck of cards, the dealer's cards, the player's cards, the panels for the player's and dealer's cards
+	public static Card dealerHiddenCard; //  and the hidden card of the dealer.
 
 	private static double balance = 0.0; // Setting the initial amounts for the Balance,
 	private static int betAmount = 0, roundCount = 0; // the amount the player bets and the number of rounds.
